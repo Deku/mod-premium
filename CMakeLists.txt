@@ -1,6 +1,7 @@
 CU_SET_PATH("CMAKE_PREMIUM_DIR" "${CMAKE_CURRENT_LIST_DIR}")
 
-AC_ADD_SCRIPT("${CMAKE_CURRENT_LIST_DIR}/src/premium.cpp")
+AC_ADD_SCRIPT("${CMAKE_CURRENT_LIST_DIR}/src/item_premium.cpp")
+AC_ADD_SCRIPT("${CMAKE_CURRENT_LIST_DIR}/src/world_premium.cpp")
 
 AC_ADD_SCRIPT_LOADER("Premium"      "${CMAKE_CURRENT_LIST_DIR}/src/loader.h")
 

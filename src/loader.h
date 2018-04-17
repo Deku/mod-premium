@@ -1,5 +1,6 @@
-void AddSC_premium_account();
+#include "included_scripts.h"
 
 void AddPremiumScripts() {
-    AddSC_premium_account();
+    AddSC_world_premium();
+    AddSC_item_premium();
 }

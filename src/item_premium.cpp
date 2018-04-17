@@ -6,6 +6,7 @@
 #include "ScriptMgr.h"
 #include "Spell.h"
 #include "Configuration/Config.h"
+#include "included_scripts.h"
 
 enum Vendors
 {
@@ -56,10 +57,39 @@ enum Mounts
     DRAENEI_MOUNT   = 34406
 };
 
-class premium_account : public ItemScript
+int Morphs[] = {
+    10134,     // Troll Female                 'Orb of Deception'
+    10135,     // Troll Male                   'Orb of Deception'
+    10136,     // Tauren Male                  'Orb of Deception'
+    10137,     // Human Male                   'Orb of Deception'
+    10138,     // Human Female                 'Orb of Deception'
+    10139,     // Orc Male                     'Orb of Deception'
+    10140,     // Orc Female                   'Orb of Deception' 
+    10141,     // Dwarf Male                   'Orb of Deception'
+    10142,     // Dwarf Female                 'Orb of Deception' 
+    10143,    // NightElf Male                'Orb of Deception'
+    10144,    // NightElf Female              'Orb of Deception'
+    10145,    // Undead Female                'Orb of Deception'
+    10146,    // Undead Male                  'Orb of Deception'
+    10147,    // Tauren Female                'Orb of Deception'
+    10148,    // Gnome Male                   'Orb of Deception'
+    10149,    // Gnome Female                 'Orb of Deception'
+    4527,     // Thrall                       'Orgrimmar Boss'
+    11657,    // Lady Sylvanas                'Undercity Boss'
+    4307,     // Cairne Bloodhoof             'Thunderbluff Boss'
+    17122,    // Lor´themar Theron            'Silvermoon City Boss'
+    3597,     // King Magni Bronzebeard       'Ironforge Boss'
+    5566,     // Highlord Bolvar Fordragon    'Stormwind Boss'
+    7006,     // High Tinker Mekkatorque      'Gnomer Boss'
+    7274,     // Tyrande Whisperwind          'Darnassus Boss'
+    21976,    // Arthus Small                 'Arthus'
+    24641    // Arthus Ghost                 'Arthus Ghost'
+};
+
+class item_premium : public ItemScript
 {
 public:
-    premium_account() : ItemScript("premium_account") { }
+    item_premium() : ItemScript("item_premium") { }
 
     bool OnUse(Player* player, Item* item, SpellCastTargets const& /*targets*/) override
     {
@@ -122,7 +152,7 @@ public:
         return false; // Cast the spell on use normally
     }
 
-    void OnGossipSelect(Player* player, Item* item, uint32 /*sender*/, uint32 action)
+    void OnGossipSelect(Player* player, Item* item, uint32 /*sender*/, uint32 action) override
     {
         switch (action)
         {
@@ -267,44 +297,11 @@ public:
 
     void ApplyRandomMorph(Player* player)
     {
-        uint32 random = (urand(1, 26)); // Change this line when adding more morphs
-        {
-            switch (random)
-            {
-                case 1: player->SetDisplayId(10134); break;     // Troll Female                 'Orb of Deception'
-                case 2: player->SetDisplayId(10135); break;     // Troll Male                   'Orb of Deception'
-                case 3: player->SetDisplayId(10136); break;     // Tauren Male                  'Orb of Deception'
-                case 4: player->SetDisplayId(10137); break;     // Human Male                   'Orb of Deception'
-                case 5: player->SetDisplayId(10138); break;     // Human Female                 'Orb of Deception'
-                case 6: player->SetDisplayId(10139); break;     // Orc Male                     'Orb of Deception'
-                case 7: player->SetDisplayId(10140); break;     // Orc Female                   'Orb of Deception' 
-                case 8: player->SetDisplayId(10141); break;     // Dwarf Male                   'Orb of Deception'
-                case 9: player->SetDisplayId(10142); break;     // Dwarf Female                 'Orb of Deception' 
-                case 10: player->SetDisplayId(10143); break;    // NightElf Male                'Orb of Deception'
-                case 11: player->SetDisplayId(10144); break;    // NightElf Female              'Orb of Deception'
-                case 12: player->SetDisplayId(10145); break;    // Undead Female                'Orb of Deception'
-                case 13: player->SetDisplayId(10146); break;    // Undead Male                  'Orb of Deception'
-                case 14: player->SetDisplayId(10147); break;    // Tauren Female                'Orb of Deception'
-                case 15: player->SetDisplayId(10148); break;    // Gnome Male                   'Orb of Deception'
-                case 16: player->SetDisplayId(10149); break;    // Gnome Female                 'Orb of Deception'
-                case 17: player->SetDisplayId(4527); break;     // Thrall                       'Orgrimmar Boss'
-                case 18: player->SetDisplayId(11657); break;    // Lady Sylvanas                'Undercity Boss'
-                case 19: player->SetDisplayId(4307); break;     // Cairne Bloodhoof             'Thunderbluff Boss'
-                case 20: player->SetDisplayId(17122); break;    // Lor´themar Theron            'Silvermoon City Boss'
-                case 21: player->SetDisplayId(3597); break;     // King Magni Bronzebeard       'Ironforge Boss'
-                case 22: player->SetDisplayId(5566); break;     // Highlord Bolvar Fordragon    'Stormwind Boss'
-                case 23: player->SetDisplayId(7006); break;     // High Tinker Mekkatorque      'Gnomer Boss'
-                case 24: player->SetDisplayId(7274); break;     // Tyrande Whisperwind          'Darnassus Boss'
-                case 25: player->SetDisplayId(21976); break;    // Arthus Small                 'Arthus'
-                case 26: player->SetDisplayId(24641); break;    // Arthus Ghost                 'Arthus Ghost'
-
-                default:
-                    break;
-            }
-        }
+        uint32 random = (urand(0, 25)); // Change this line when adding more morphs
+        player->SetDisplayId(Morphs[random]);
     }
 
-    void SummonTempNPC(Player* player, uint32 entry, const char* salute = '\0')
+    void SummonTempNPC(Player* player, uint32 entry, const char* salute = "\0")
     {
         if (!player || entry == 0)
             return;
@@ -318,31 +315,12 @@ public:
         npc->GetMotionMaster()->MoveFollow(player, PET_FOLLOW_DIST, player->GetFollowAngle());
         npc->setFaction(player->getFaction());
 
-        if (salute && !salute[0] == '\0')
+        if (salute && !(salute[0] == '\0'))
             npc->MonsterWhisper(salute, player, false);
     }
 };
 
-
-class premium_world : public WorldScript
+void AddSC_item_premium()
 {
-public:
-    premium_world() : WorldScript("premiumworld") { }
-
-    void OnBeforeConfigLoad(bool reload) override
-    {
-        if (!reload) {
-            std::string cfg_file = "premium.conf";
-            std::string cfg_def_file = cfg_file + ".dist";
-
-            sConfigMgr->LoadMore(cfg_def_file.c_str());
-            sConfigMgr->LoadMore(cfg_file.c_str());
-        }
-    }
-};
-
-void AddSC_premium_account()
-{
-    new premium_account();
-    new premium_world();
+    new item_premium();
 }
